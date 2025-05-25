@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="spritesheet.png">
+	<!-- Created with Adobe Animate version 19.0.0.326 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="sonic fair instância 10000" x="2" y="2" width="87" height="83" frameX="0" frameY="-9" frameWidth="109" frameHeight="106"/>
+	<SubTexture name="sonic fair instância 10001" x="91" y="2" width="83" height="87" frameX="-3" frameY="-5" frameWidth="109" frameHeight="106"/>
+	<SubTexture name="sonic fair instância 10002" x="176" y="2" width="99" height="87" frameX="0" frameY="0" frameWidth="109" frameHeight="106"/>
+	<SubTexture name="sonic fair instância 10003" x="277" y="2" width="97" height="105" frameX="-12" frameY="-1" frameWidth="109" frameHeight="106"/>
+	<SubTexture name="sonic fair instância 10004" x="376" y="2" width="99" height="102" frameX="-7" frameY="-4" frameWidth="109" frameHeight="106"/>
+	<SubTexture name="sonic fall instância 10000" x="2" y="109" width="104" height="155"/>
+	<SubTexture name="sonic idle instância 10000" x="108" y="109" width="82" height="129"/>
+	<SubTexture name="sonic instashield instância 10000" x="192" y="109" width="88" height="91" frameX="-8" frameY="0" frameWidth="98" frameHeight="99"/>
+	<SubTexture name="sonic instashield instância 10001" x="282" y="109" width="90" height="87" frameX="-8" frameY="-11" frameWidth="98" frameHeight="99"/>
+	<SubTexture name="sonic instashield instância 10002" x="374" y="109" width="90" height="88" frameX="0" frameY="-11" frameWidth="98" frameHeight="99"/>
+	<SubTexture name="sonic instashield instância 10003" x="2" y="266" width="89" height="91" frameX="0" frameY="-1" frameWidth="98" frameHeight="99"/>
+	<SubTexture name="sonic run instância 10000" x="93" y="266" width="99" height="100" frameX="-1" frameY="0" frameWidth="100" frameHeight="101"/>
+	<SubTexture name="sonic run instância 10001" x="194" y="266" width="98" height="97" frameX="-1" frameY="-3" frameWidth="100" frameHeight="101"/>
+	<SubTexture name="sonic run instância 10002" x="294" y="266" width="98" height="99" frameX="-1" frameY="0" frameWidth="100" frameHeight="101"/>
+	<SubTexture name="sonic run instância 10003" x="394" y="266" width="99" height="98" frameX="0" frameY="-3" frameWidth="100" frameHeight="101"/>
+	<SubTexture name="sonic spin instância 10000" x="2" y="368" width="87" height="83" frameX="-3" frameY="-3" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10001" x="91" y="368" width="82" height="80" frameX="-4" frameY="-6" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10002" x="175" y="368" width="83" height="87" frameX="-4" frameY="-4" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10003" x="260" y="368" width="80" height="81" frameX="-4" frameY="-5" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10004" x="342" y="368" width="87" height="83" frameX="0" frameY="-4" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10005" x="2" y="457" width="82" height="80" frameX="-4" frameY="-5" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10006" x="86" y="457" width="82" height="87" frameX="-4" frameY="0" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic spin instância 10007" x="170" y="457" width="80" height="82" frameX="-6" frameY="-4" frameWidth="90" frameHeight="91"/>
+	<SubTexture name="sonic walk instância 10000" x="252" y="457" width="77" height="110" frameX="-32" frameY="-1" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonic walk instância 10001" x="331" y="457" width="115" height="102" frameX="-2" frameY="0" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonic walk instância 10002" x="2" y="569" width="85" height="109" frameX="-23" frameY="-2" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonic walk instância 10003" x="89" y="569" width="82" height="110" frameX="-27" frameY="-1" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonic walk instância 10004" x="173" y="569" width="120" height="104" frameX="0" frameY="0" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonic walk instância 10005" x="295" y="569" width="91" height="109" frameX="-22" frameY="-2" frameWidth="120" frameHeight="111"/>
+	<SubTexture name="sonicBrake instância 10000" x="2" y="681" width="127" height="122"/>
+	<SubTexture name="sonictheairdodge instância 10000" x="131" y="681" width="114" height="108"/>
+</TextureAtlas>
