@@ -41,7 +41,7 @@ class FighterSprite extends FlxSprite
 	public function animPlay(animName:String, force:Bool = false, reversed:Bool = false, frame:Int = 0):Void {
 		var daOffset = animOffsets.get(animName);
 		if (animOffsets.exists(animName)) {
-			hitboxAnimOffset = [(flipX ? (daOffset[0] * -1) : daOffset[0]), daOffset[1]];
+			hitboxAnimOffset = [(flipX ? (((daOffset[0] * -1) + frameWidth) - width) : daOffset[0]), daOffset[1]];
 		} else
 			hitboxAnimOffset = [0, 0];
 			

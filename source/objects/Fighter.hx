@@ -21,22 +21,27 @@ class Fighter extends FlxSpriteGroup
 		super(x, y);
 		
 		// SETUP
+		trace('NEW FIGHTER: ' + fitName);
 		// SPRITE
 		fitSprite = new FighterSprite(x, y, fitName);
 		add(fitSprite);
 		
 		// SCRIPT
 		fitScript = new IrisHandler();
+		
+		var filenames:Array<String> = ['fighter', 'init', 'attacks', 'misc'];
+		
+		for (filery in filenames) { 
+			var file:String = Paths.script(filery, fitSprite.fitFolder);
+			trace(file);
 
-		var file:String = Paths.script('fighter', fitSprite.fitFolder);
-		trace(file);
-
-		if (CoolUtil.fileExists(file))
-		{
-			trace(fitName + " FIGHTER SCRIPT: " + file);
-			fitScript.addByPath(file);
-			fitScript.setup();
-			fitScript.set('fit', this);
+			if (CoolUtil.fileExists(file))
+			{
+				trace(fitName + " | " + filery.toUpperCase() + " SCRIPT: " + file);
+				fitScript.addByPath(file);
+				fitScript.setup();
+				fitScript.set('fit', this);
+			}
 		}
 		
 		// HITBOX
