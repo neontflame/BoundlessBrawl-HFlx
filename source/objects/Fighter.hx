@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxDirectionFlags;
+import flixel.util.FlxTimer;
 
 import backend.IrisHandler;
 
@@ -84,6 +85,9 @@ class Fighter extends FlxSpriteGroup
 	public var JUMP_HEIGHT:Float = 500;
 	
 	public var jumped:Bool = false;
+	
+	public var horizontalDI:Float = 0;
+	public var verticalDI:Float = 0;
 
 	override public function update(elapsed:Float)
 	{
@@ -97,6 +101,9 @@ class Fighter extends FlxSpriteGroup
 	}
 	
 	function playerMovement() {
+		horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
+		verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
+		
 		// start player movement
 		switch (status) {
 			case "dmg":
@@ -105,6 +112,21 @@ class Fighter extends FlxSpriteGroup
 				// dmgcontrollable
 			case "airdodge":
 				// airdodge
+				hitbox.velocity.x = WALK_SPEED * horizontalDI;
+				hitbox.velocity.y = WALK_SPEED * verticalDI;
+				
+				hitbox.drag.x = WALK_SPEED * 4;
+				hitbox.drag.y = WALK_SPEED * 4;
+				
+				var airdodgeTimer:FlxTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+					status = "default";
+				});
+				
+				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
+					status = "default";
+					airdodgeTimer.destroy();
+				}
+				
 			case "attack":
 				// attacks
 			default:
@@ -112,6 +134,7 @@ class Fighter extends FlxSpriteGroup
 				hitbox.maxVelocity.x = WALK_SPEED;
 				HORIZONTAL_ACCEL = WALK_SPEED * 8;
 				hitbox.drag.x = WALK_SPEED * 6;
+				hitbox.drag.y = 0;
 				
 				if (InputCoolio.key('right')) {
 					hitbox.acceleration.x = HORIZONTAL_ACCEL;
@@ -159,6 +182,7 @@ class Fighter extends FlxSpriteGroup
 					// dmgcontrollable
 				case "airdodge":
 					// airdodge
+					fitSprite.animPlay('airdodge');
 				case "attack":
 					// there is nothing.
 					// attack info goes on the character's very own fighter.hx
