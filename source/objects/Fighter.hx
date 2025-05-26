@@ -187,4 +187,13 @@ class Fighter extends FlxSpriteGroup
 		}
 	}
 	
+	function attack(?callback:Dynamic) {
+		status = "attack";
+		if (callback != null) {
+			callback();
+		} else {
+			trace("You can't attack someone without a function to do so!!");
+		}
+	}
+	
 }

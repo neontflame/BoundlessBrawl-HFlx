@@ -122,6 +122,7 @@ class IrisHandler {
 		// Classes (Boundless Brawl)
 		set("Paths", Paths);
 		set("CoolUtil", CoolUtil);
+		set("InputCoolio", InputCoolio);
 		set("BattleState", BattleState);
 	}
 }
