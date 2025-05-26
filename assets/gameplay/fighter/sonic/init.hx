@@ -11,6 +11,7 @@ function loadAnims() {
 	
 	fit.fitSprite.animAdd('jump', 'sonic spin', [0, 0], 30);
 	fit.fitSprite.animAdd('fall', 'sonic fall', [0, 0]);
+	fit.fitSprite.animAdd('airdodge', 'sonictheairdodge', [0, 0]);
 	
 	trace(fit.fitSprite.animOffsets);
 	fit.fitSprite.animPlay('idle');

@@ -115,6 +115,8 @@ class Fighter extends FlxSpriteGroup
 				// dmgcontrollable
 			case "airdodge":
 				// airdodge
+				hitbox.acceleration.y = 0;
+				hitbox.acceleration.x = 0;
 				hitbox.drag.x = WALK_SPEED * 5;
 				hitbox.drag.y = WALK_SPEED * 5;
 				
