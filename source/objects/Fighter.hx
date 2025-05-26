@@ -134,42 +134,57 @@ class Fighter extends FlxSpriteGroup
 					status = "airdodge";
 				}
 				
-				playerDefaultAnim();
 		}
+		
 		// end player movement
+		playerDefaultAnim(status);
 	}
 	
 	public var exoticDefaultAnims:Bool = false;
 	
-	function playerDefaultAnim() {
+	function playerDefaultAnim(status:String) {
 		fitScript.call('playerDefaultAnim');
 		
 		if (!exoticDefaultAnims) {
-			// floor anims
-			if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
-				// walk anim
-				if (Math.abs(hitbox.velocity.x) > 10) {
-					if (Math.abs(hitbox.velocity.x) > WALK_SPEED)
-						fitSprite.animPlay('run');
-					else
-						fitSprite.animPlay('walk');
-				} else {
-					fitSprite.animPlay('idle');
-				}
-			// air anims
-			} else {
-				// jump
-				if (jumped) {
-					if (hitbox.velocity.y < 0)
-						fitSprite.animPlay('jump');
-				}
-				
-				// fall
-				if (hitbox.velocity.y > 0)
-					fitSprite.animPlay('fall');
+			// start switch
+			switch (status) {
+				case "dmg":
+					// dmg
+				case "dmgcontrollable":
+					// dmgcontrollable
+				case "airdodge":
+					// airdodge
+				case "attack":
+					// there is nothing.
+					// attack info goes on the character's very own fighter.hx
+				default:
+					// floor anims
+					if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
+						// walk anim
+						if (Math.abs(hitbox.velocity.x) > 10) {
+							if (Math.abs(hitbox.velocity.x) > WALK_SPEED)
+								fitSprite.animPlay('run');
+							else
+								fitSprite.animPlay('walk');
+						} else {
+							fitSprite.animPlay('idle');
+						}
+					// air anims
+					} else {
+						// jump
+						if (jumped) {
+							if (hitbox.velocity.y < 0)
+								fitSprite.animPlay('jump');
+						}
+						
+						// fall
+						if (hitbox.velocity.y > 0)
+							fitSprite.animPlay('fall');
+					}
 			}
+			// end switch
+			
 		}
-		
 	}
 	
 }
