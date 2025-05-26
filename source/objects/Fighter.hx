@@ -117,8 +117,8 @@ class Fighter extends FlxSpriteGroup
 				// airdodge
 				hitbox.acceleration.y = 0;
 				hitbox.acceleration.x = 0;
-				hitbox.drag.x = WALK_SPEED * 5;
-				hitbox.drag.y = WALK_SPEED * 5;
+				hitbox.drag.x = WALK_SPEED * 4;
+				hitbox.drag.y = WALK_SPEED * 4;
 				
 				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					status = "default";
@@ -161,7 +161,7 @@ class Fighter extends FlxSpriteGroup
 					hitbox.velocity.x = WALK_SPEED * horizontalDI;
 					hitbox.velocity.y = WALK_SPEED * verticalDI;
 				
-					airdodgeTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+					airdodgeTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer) {
 						status = "default";
 					});
 					
