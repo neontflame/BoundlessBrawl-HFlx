@@ -34,7 +34,6 @@ class Fighter extends FlxSpriteGroup
 		
 		for (filery in filenames) { 
 			var file:String = Paths.script(filery, fitSprite.fitFolder);
-			trace(file);
 
 			if (CoolUtil.fileExists(file))
 			{
@@ -88,7 +87,9 @@ class Fighter extends FlxSpriteGroup
 	
 	public var horizontalDI:Float = 0;
 	public var verticalDI:Float = 0;
-
+	
+	var airdodgeTimer:FlxTimer;
+	
 	override public function update(elapsed:Float)
 	{
 		fitScript.call('update', [elapsed]);
@@ -101,8 +102,10 @@ class Fighter extends FlxSpriteGroup
 	}
 	
 	function playerMovement() {
-		horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
-		verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
+		if (status != "airdodge") {
+			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
+			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
+		}
 		
 		// start player movement
 		switch (status) {
@@ -112,21 +115,15 @@ class Fighter extends FlxSpriteGroup
 				// dmgcontrollable
 			case "airdodge":
 				// airdodge
-				hitbox.velocity.x = WALK_SPEED * horizontalDI;
-				hitbox.velocity.y = WALK_SPEED * verticalDI;
-				
-				hitbox.drag.x = WALK_SPEED * 4;
-				hitbox.drag.y = WALK_SPEED * 4;
-				
-				var airdodgeTimer:FlxTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
-					status = "default";
-				});
+				hitbox.drag.x = WALK_SPEED * 5;
+				hitbox.drag.y = WALK_SPEED * 5;
 				
 				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					status = "default";
 					airdodgeTimer.destroy();
 				}
 				
+
 			case "attack":
 				// attacks
 			default:
@@ -159,6 +156,13 @@ class Fighter extends FlxSpriteGroup
 				
 				// AIRDODGE COOLIO
 				if (InputCoolio.key('dodge', true)) {
+					hitbox.velocity.x = WALK_SPEED * horizontalDI;
+					hitbox.velocity.y = WALK_SPEED * verticalDI;
+				
+					airdodgeTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+						status = "default";
+					});
+					
 					status = "airdodge";
 				}
 				
