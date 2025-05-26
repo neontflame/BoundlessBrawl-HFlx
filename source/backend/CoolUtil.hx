@@ -54,7 +54,7 @@ class CoolUtil {
 		
 		if (bitmaps) {
 			// Clear all Flixel bitmaps
-			FlxG.bitmap.dumpCache();
+			// FlxG.bitmap.reset();
 			FlxG.bitmap.clearCache();
 			trace('bitmap cache cleared');
 		}
