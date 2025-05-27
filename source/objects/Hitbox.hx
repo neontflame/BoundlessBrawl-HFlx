@@ -9,7 +9,10 @@ class Hitbox extends FlxSprite
 {
 	public var gravEnabled:Bool = true;
 	public var gravValue:Float = 1000;
-	public var maxGravValue:Float = 1000;
+	// public var maxGravValue:Float = 1000;
+	
+	public var fallingOffJumpthru:Bool = false;
+	public var jumpthruFalloffTimer:Float = 1;
 	
 	public function new(x:Float, y:Float, ?wid:Int = 32, ?hei:Int = 32) {
 		super(x, y);
@@ -31,6 +34,10 @@ class Hitbox extends FlxSprite
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		
+		if (jumpthruFalloffTimer > 0) {
+			jumpthruFalloffTimer -= 1;
+		}
 	}
 	
 	public function physUpdate(floor, jumpthru) {
@@ -44,6 +51,6 @@ class Hitbox extends FlxSprite
 		
 		//bump the player up against the level
 		FlxG.collide(this, floor);
-		FlxG.collide(this, jumpthru);
+		if (jumpthruFalloffTimer <= 0) FlxG.collide(this, jumpthru);
 	}
 }
