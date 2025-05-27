@@ -66,7 +66,7 @@ class Fighter extends FlxSpriteGroup
 	
 	// CHAR CONTROLLER WHAAAAAAAAAAAATTTT
 	// [-] basic movement
-	//		[ ] running
+	//		[v] running
 	//		[v] airdodging
 	//		[ ] damage
 	// [v] attacks (its literally just a callback this Shit is Not to be made up .)
@@ -169,7 +169,7 @@ class Fighter extends FlxSpriteGroup
 					hitbox.maxVelocity.x = WALK_SPEED;
 					HORIZONTAL_ACCEL = WALK_SPEED * 8;
 				}
-				hitbox.drag.x = WALK_SPEED * 6;
+				hitbox.drag.x = WALK_SPEED * FLOOR_FRICTION;
 				hitbox.drag.y = 0;
 				
 				if (InputCoolio.key('right')) {
@@ -206,7 +206,13 @@ class Fighter extends FlxSpriteGroup
 					// run
 					if (InputCoolio.key('right', 'press') || InputCoolio.key('left', 'press')) {
 						if (runTimer > 0) {
-							RUNNING = true;
+							if (!RUNNING) {
+								RUNNING = true;
+								if (InputCoolio.key('right'))
+									hitbox.velocity.x = RUN_SPEED;
+								if (InputCoolio.key('left'))
+									hitbox.velocity.x = -RUN_SPEED;
+							}
 						} else {
 							runTimer = 15;
 						}
