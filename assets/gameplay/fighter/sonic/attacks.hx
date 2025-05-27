@@ -1,6 +1,6 @@
 function update() {
 
-	if (InputCoolio.key('right') && InputCoolio.key('basic', true)) {
+	if (InputCoolio.key('right') && InputCoolio.key('basic', 'press')) {
 	
 		// SAMPLE RIGHT ATTACK
 		fit.attack(function() {

@@ -71,17 +71,19 @@ class Fighter extends FlxSpriteGroup
 	//		[ ] damage
 	// [v] attacks (its literally just a callback this Shit is Not to be made up .)
 	
-	public var controllable:Bool = true;
+	public var controlOnAttack:Bool = false;
 	public var status:String = "default";
 	public var curAnim:String = "default";
 	
 	public var dmgPercent:Float = 0;
 	
 	public var WALK_SPEED:Float = 500;
-	public var RUN_SPEED:Float = 0;
+	public var RUN_SPEED:Float = 700;
 	public var HORIZONTAL_ACCEL:Float = 500;
 	
 	public var JUMP_HEIGHT:Float = 500;
+	public var RUNNING:Bool = false;
+	var runTimer:Float = 0;
 	
 	public var jumped:Bool = false;
 	public var airdodged:Bool = true;
@@ -103,6 +105,11 @@ class Fighter extends FlxSpriteGroup
 	}
 	
 	function playerMovement() {
+		// running timer
+		if (runTimer > 0) {
+			runTimer -= 1;
+		} 
+		
 		if (status != "airdodge") {
 			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
 			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
@@ -110,10 +117,13 @@ class Fighter extends FlxSpriteGroup
 		
 		// start player movement
 		switch (status) {
-			case "dmg":
-				// dmg
-			case "dmgcontrollable":
-				// dmgcontrollable
+			case "dmg" | "dmgcontrollable":
+				// dmg/dmgcont
+				// they share much of the same code, it's just now we gotta figure out what DMGControllable does specifically
+				if (status == "dmgcontrollable") {
+					// woooah
+				}
+				
 			case "airdodge":
 				// airdodge
 				airdodged = true;
@@ -130,16 +140,41 @@ class Fighter extends FlxSpriteGroup
 
 			case "attack":
 				// attacks
+				// i Just remembered aerial attacks are a thing fuack
+				if (controlOnAttack) {
+					hitbox.maxVelocity.x = WALK_SPEED;
+					HORIZONTAL_ACCEL = WALK_SPEED * 6;
+					hitbox.drag.x = WALK_SPEED * 4;
+					hitbox.drag.y = 0;
+					
+					if (InputCoolio.key('right')) {
+						hitbox.acceleration.x = HORIZONTAL_ACCEL;
+					} else if (InputCoolio.key('left')) {
+						hitbox.acceleration.x = -HORIZONTAL_ACCEL;
+					} else {
+						hitbox.acceleration.x = 0;
+						RUNNING = false;
+					}
+				}
 			default:
 				// default player state!
-				hitbox.maxVelocity.x = WALK_SPEED;
-				HORIZONTAL_ACCEL = WALK_SPEED * 8;
+				if (RUNNING) {
+					hitbox.maxVelocity.x = RUN_SPEED;
+					HORIZONTAL_ACCEL = RUN_SPEED * 8;
+				} else {
+					hitbox.maxVelocity.x = WALK_SPEED;
+					HORIZONTAL_ACCEL = WALK_SPEED * 8;
+				}
 				hitbox.drag.x = WALK_SPEED * 6;
 				hitbox.drag.y = 0;
 				
 				if (InputCoolio.key('right')) {
+					if (RUNNING) 
+						runTimer = 10;
 					hitbox.acceleration.x = HORIZONTAL_ACCEL;
 				} else if (InputCoolio.key('left')) {
+					if (RUNNING) 
+						runTimer = 10;
 					hitbox.acceleration.x = -HORIZONTAL_ACCEL;
 				} else {
 					hitbox.acceleration.x = 0;
@@ -153,18 +188,33 @@ class Fighter extends FlxSpriteGroup
 						fitSprite.flipX = true;
 					}
 					
-					if (InputCoolio.key('down', true)) {
+					// fall off platforms
+					if (InputCoolio.key('down', 'press')) {
 						hitbox.jumpthruFalloffTimer = 15;
 					}
 					
-					if (InputCoolio.key('jump', true)) {
+					// jump
+					if (InputCoolio.key('jump', 'press')) {
 						hitbox.velocity.y = -JUMP_HEIGHT;
 						jumped = true;
+					}
+					
+					// run
+					if (InputCoolio.key('right', 'press') || InputCoolio.key('left', 'press')) {
+						if (runTimer > 0) {
+							RUNNING = true;
+							if (InputCoolio.key('right'))
+								hitbox.velocity.x = RUN_SPEED;
+							if (InputCoolio.key('left'))
+								hitbox.velocity.x = -RUN_SPEED;
+						}
+						
+						runTimer = 15;
 					}
 				}
 				
 				// AIRDODGE COOLIO
-				if (InputCoolio.key('dodge', true)) {
+				if (InputCoolio.key('dodge', 'press')) {
 					if (!airdodged) {
 						status = "airdodge";
 						
@@ -194,9 +244,8 @@ class Fighter extends FlxSpriteGroup
 		if (!exoticDefaultAnims) {
 			// start switch
 			switch (status) {
-				case "dmg":
+				case "dmg" | "dmgcontrollable":
 					// dmg
-				case "dmgcontrollable":
 					// dmgcontrollable
 				case "airdodge":
 					// airdodge
