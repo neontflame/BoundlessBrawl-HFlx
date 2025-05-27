@@ -8,14 +8,15 @@ import objects.*;
 
 class BattleState extends FlxState
 {
+	var fighterlist:Array<Fighter> = [];
 	var player1:Fighter;
+	
 	var floor:FlxSprite;
 	var jumpthru:FlxSprite;
 	
 	override public function create()
 	{
 		super.create();
-		
 		
 		floor = new FlxSprite(0, 400).makeGraphic(500, 25, 0xFFFFFFFF);
 		floor.immovable = true;
@@ -29,6 +30,8 @@ class BattleState extends FlxState
 		
 		player1 = new Fighter(100, 100, 'sonic');
 		add(player1);
+		
+		fighterlist.push(player1);
 	}
 
 	override public function update(elapsed:Float)

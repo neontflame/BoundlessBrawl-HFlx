@@ -9,6 +9,7 @@ class Hitbox extends FlxSprite
 {
 	public var gravEnabled:Bool = true;
 	public var gravValue:Float = 1000;
+	public var gravMultiplier:Float = 1;
 	// public var maxGravValue:Float = 1000;
 	
 	public var fallingOffJumpthru:Bool = false;
@@ -44,7 +45,7 @@ class Hitbox extends FlxSprite
 		// maxVelocity.y = maxGravValue;
 		
 		if (gravEnabled) {
-			acceleration.y = gravValue;
+			acceleration.y = gravValue * gravMultiplier;
 		} else {
 			acceleration.y = 0;
 		}

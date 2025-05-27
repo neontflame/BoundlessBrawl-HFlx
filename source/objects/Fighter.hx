@@ -18,6 +18,18 @@ class Fighter extends FlxSpriteGroup
 	public var fitSprite:FighterSprite;
 	public var hitbox:Hitbox;
 
+	// MAIN STATS
+	public var WALK_SPEED:Float = 500;
+	public var RUN_SPEED:Float = 700;
+	public var HORIZONTAL_ACCEL:Float = 500;
+	public var JUMP_STRENGTH:Float = 600;
+	public var WEIGHT:Float = 2000;
+	
+	public var FLOOR_FRICTION:Float = 6;
+	public var AIRDODGE_COEFFICIENT:Float = 4.5;
+	
+	public var RUNNING:Bool = false;
+	
 	public function new(x:Float, y:Float, ?fitName:String = 'sonic') {
 		super(x, y);
 		
@@ -47,6 +59,7 @@ class Fighter extends FlxSpriteGroup
 		// HITBOX
 		hitbox = new Hitbox(x, y, 32, 32);
 		add(hitbox);
+		hitbox.gravValue = WEIGHT;
 
 		loadAnims(fitName); // anims!
 		
@@ -76,16 +89,6 @@ class Fighter extends FlxSpriteGroup
 	public var curAnim:String = "default";
 	
 	public var dmgPercent:Float = 0;
-	
-	public var WALK_SPEED:Float = 500;
-	public var RUN_SPEED:Float = 700;
-	public var HORIZONTAL_ACCEL:Float = 500;
-	
-	public var FLOOR_FRICTION:Float = 6;
-	public var AIRDODGE_COEFFICIENT:Float = 4.5;
-	
-	public var JUMP_HEIGHT:Float = 500;
-	public var RUNNING:Bool = false;
 	var runTimer:Float = 0;
 	
 	public var jumped:Bool = false;
@@ -199,7 +202,7 @@ class Fighter extends FlxSpriteGroup
 					
 					// jump
 					if (InputCoolio.key('jump', 'press')) {
-						hitbox.velocity.y = -JUMP_HEIGHT;
+						hitbox.velocity.y = -JUMP_STRENGTH;
 						jumped = true;
 					}
 					
