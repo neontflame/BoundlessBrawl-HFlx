@@ -108,7 +108,9 @@ class Fighter extends FlxSpriteGroup
 		// running timer
 		if (runTimer > 0) {
 			runTimer -= 1;
-		} 
+		} else {
+			RUNNING = false;
+		}
 		
 		if (status != "airdodge") {
 			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
@@ -153,7 +155,6 @@ class Fighter extends FlxSpriteGroup
 						hitbox.acceleration.x = -HORIZONTAL_ACCEL;
 					} else {
 						hitbox.acceleration.x = 0;
-						RUNNING = false;
 					}
 				}
 			default:
@@ -170,11 +171,11 @@ class Fighter extends FlxSpriteGroup
 				
 				if (InputCoolio.key('right')) {
 					if (RUNNING) 
-						runTimer = 10;
+						runTimer = 7;
 					hitbox.acceleration.x = HORIZONTAL_ACCEL;
 				} else if (InputCoolio.key('left')) {
 					if (RUNNING) 
-						runTimer = 10;
+						runTimer = 7;
 					hitbox.acceleration.x = -HORIZONTAL_ACCEL;
 				} else {
 					hitbox.acceleration.x = 0;
@@ -203,13 +204,9 @@ class Fighter extends FlxSpriteGroup
 					if (InputCoolio.key('right', 'press') || InputCoolio.key('left', 'press')) {
 						if (runTimer > 0) {
 							RUNNING = true;
-							if (InputCoolio.key('right'))
-								hitbox.velocity.x = RUN_SPEED;
-							if (InputCoolio.key('left'))
-								hitbox.velocity.x = -RUN_SPEED;
+						} else {
+							runTimer = 15;
 						}
-						
-						runTimer = 15;
 					}
 				}
 				
