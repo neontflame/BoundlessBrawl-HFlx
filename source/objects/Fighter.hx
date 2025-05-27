@@ -81,6 +81,9 @@ class Fighter extends FlxSpriteGroup
 	public var RUN_SPEED:Float = 700;
 	public var HORIZONTAL_ACCEL:Float = 500;
 	
+	public var FLOOR_FRICTION:Float = 6;
+	public var AIRDODGE_COEFFICIENT:Float = 4.5;
+	
 	public var JUMP_HEIGHT:Float = 500;
 	public var RUNNING:Bool = false;
 	var runTimer:Float = 0;
@@ -131,8 +134,8 @@ class Fighter extends FlxSpriteGroup
 				airdodged = true;
 				hitbox.acceleration.y = 0;
 				hitbox.acceleration.x = 0;
-				hitbox.drag.x = WALK_SPEED * 4.5;
-				hitbox.drag.y = WALK_SPEED * 4.5;
+				hitbox.drag.x = WALK_SPEED * AIRDODGE_COEFFICIENT;
+				hitbox.drag.y = WALK_SPEED * AIRDODGE_COEFFICIENT;
 				
 				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					status = "default";
@@ -146,7 +149,7 @@ class Fighter extends FlxSpriteGroup
 				if (controlOnAttack) {
 					hitbox.maxVelocity.x = WALK_SPEED;
 					HORIZONTAL_ACCEL = WALK_SPEED * 6;
-					hitbox.drag.x = WALK_SPEED * 4;
+					// hitbox.drag.x = WALK_SPEED * FLOOR_FRICTION;
 					hitbox.drag.y = 0;
 					
 					if (InputCoolio.key('right')) {
