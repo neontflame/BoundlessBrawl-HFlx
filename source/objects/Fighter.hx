@@ -69,7 +69,7 @@ class Fighter extends FlxSpriteGroup
 	//		[ ] running
 	//		[v] airdodging
 	//		[ ] damage
-	// [ ] attacks
+	// [v] attacks (its literally just a callback this Shit is Not to be made up .)
 	
 	public var controllable:Bool = true;
 	public var status:String = "default";
