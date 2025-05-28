@@ -80,15 +80,16 @@ class Fighter extends FlxSpriteGroup
 
 	public function posUpdate() {
 		// position shittery!
-		fitSprite.x = ((hitbox.x + hitbox.origin.x) - fitSprite.width/2) + fitSprite.hitboxOffset[0] + fitSprite.hitboxAnimOffset[0];
+		fitSprite.x = ((hitbox.x + hitbox.origin.x) - fitSprite.width/2) + fitSprite.hitboxOffset[0] + fitSprite.hitboxAnimOffset[0]
+		+ FlxG.random.float(-hitstun / 10, hitstun / 10);
 		fitSprite.y = ((hitbox.y + hitbox.origin.y) - fitSprite.height) + fitSprite.hitboxOffset[1] + fitSprite.hitboxAnimOffset[1];
 	}
 	
 	// CHAR CONTROLLER WHAAAAAAAAAAAATTTT
-	// [-] basic movement
+	// [v] basic movement
 	//		[v] running
 	//		[v] airdodging
-	//		[ ] damage
+	//		[v] damage
 	// [v] attacks (its literally just a callback this Shit is Not to be made up .)
 	
 	public var controlOnAttack:Bool = false;
@@ -400,7 +401,7 @@ class Fighter extends FlxSpriteGroup
 		
 		dmgPercent += damage;
 		
-		hitstun = 10000;
+		hitstun = _hitstun * 100;
 		
 		new FlxTimer(TIMER_MANAGER).start(_hitstun, function(tmr:FlxTimer) {
 			hitstun = 0;
