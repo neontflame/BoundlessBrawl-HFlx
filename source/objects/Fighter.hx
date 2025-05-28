@@ -378,7 +378,7 @@ class Fighter extends FlxSpriteGroup
 	}
 	
 	function damage(angle, damage, knockback, _hurtFrames, _hitstun){
-		var the_thing:Float = FlxMath.lerp(dmg_percent, 100, 0.3);
+		var the_thing:Float = FlxMath.lerp(dmgPercent, 100, 0.3);
 
 		status = "dmg";
 		hitstun = _hitstun;
