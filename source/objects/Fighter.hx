@@ -116,13 +116,21 @@ class Fighter extends FlxSpriteGroup
 		TIMER_MANAGER.update(elapsed);
 		
 		hitStunner();
-		
+		DImanager();
 		if (hitstun <= 0)
 			playerMovement();
 			
 		super.update(elapsed);
 		
 		fitScript.call('updatePost', [elapsed]);
+		
+	}
+	
+	function DImanager() {
+		if (status != "airdodge") {
+			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
+			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
+		}
 		
 	}
 	
@@ -137,6 +145,9 @@ class Fighter extends FlxSpriteGroup
 		}
 	}
 	
+	var airvel:Float = 0;
+	var horvel:Float = 0;
+	
 	function playerMovement() {
 		// running timer
 		if (runTimer > 0) {
@@ -145,19 +156,11 @@ class Fighter extends FlxSpriteGroup
 			RUNNING = false;
 		}
 		
-		if (status != "airdodge") {
-			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
-			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
-		}
-		
 		// start player movement
 		switch (status) {
 			case "dmg" | "dmgcontrollable": 
 				// dmg/dmgcont
 				// they share much of the same code, it's just now we gotta figure out what DMG and DMGControllable do specifically
-				
-				var airvel:Float = 0;
-				var horvel:Float = 0;
 				
 				if (!hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					airvel = hitbox.velocity.y;
@@ -166,11 +169,11 @@ class Fighter extends FlxSpriteGroup
 					horvel = hitbox.velocity.x;
 				}
 				if (hitbox.isTouching(FlxDirectionFlags.CEILING)) {
-					hitbox.velocity.y = Math.abs(airvel) * 1.05; // this one is the only one that gets stronger cuz i thought itd be funny
+					hitbox.velocity.y = Math.abs(airvel) * 0.95; // this one is the only one that gets stronger cuz i thought itd be funny
 				} 
 				
 				if (hitbox.isTouching(FlxDirectionFlags.LEFT)) {
-					hitbox.velocity.x = Math.abs(horvel) * 0.95;
+					hitbox.velocity.x = Math.abs(horvel) * 0.75;
 				} 
 				if (hitbox.isTouching(FlxDirectionFlags.RIGHT)) {
 					hitbox.velocity.x = -Math.abs(horvel) * 0.95;
@@ -178,10 +181,11 @@ class Fighter extends FlxSpriteGroup
 				
 				if (status == 'dmg') {
 					hitbox.maxVelocity.x = 0;
-					hitbox.drag.x = WALK_SPEED;
+					hitbox.drag.x = 0;
 					
 					// funny bounce !
 					if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
+						trace('bounce! ' + -Math.abs(airvel) * 0.95);
 						hitbox.velocity.y = -Math.abs(airvel) * 0.95;
 					} 
 					
@@ -393,11 +397,16 @@ class Fighter extends FlxSpriteGroup
 		var the_thing:Float = FlxMath.lerp(dmgPercent, 100, 0.3);
 
 		status = "dmg";
-		hitstun = _hitstun;
 		
 		dmgPercent += damage;
-		hitbox.velocity.x = (the_thing * knockback) * (Math.sin(angle * FlxAngle.TO_RAD) + horizontalDI);
-		hitbox.velocity.y = (the_thing * knockback) * ((Math.cos(angle * FlxAngle.TO_RAD) + verticalDI) * -1);
+		
+		hitstun = 10000;
+		
+		new FlxTimer(TIMER_MANAGER).start(_hitstun, function(tmr:FlxTimer) {
+			hitstun = 0;
+			hitbox.velocity.x = (the_thing * knockback) * (Math.sin(angle * FlxAngle.TO_RAD) + horizontalDI);
+			hitbox.velocity.y = (the_thing * knockback) * ((Math.cos(angle * FlxAngle.TO_RAD) * -1) + verticalDI);
+		});
 		
 		hurtTimer = _hurtFrames;
 		
