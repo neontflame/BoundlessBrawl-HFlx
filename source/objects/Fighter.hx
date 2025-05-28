@@ -448,9 +448,11 @@ class Fighter extends FlxSpriteGroup
 			dmgboxes[hitIndex].destroy();
 			dmgboxes.remove(dmgboxes[hitIndex]);
 		} else {
-			for (dmgbox in dmgboxes) { 
+			for (dmgbox in dmgboxes) {
+				dmgbox.destroy();
 				dmgboxes.remove(dmgbox);
 			}
+			dmgboxes = [];
 		}
 	}
 }
