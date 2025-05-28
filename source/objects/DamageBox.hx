@@ -63,8 +63,13 @@ class DamageBox extends FlxSprite
 	
 	public function checkCollision(fighter:Fighter) {
 		if (FlxG.collide(this, fighter.hitbox)) {
-			fighter.damage(angle, damage, knockback, hurtFrames, hitstun);
-			destroy();
+			if (fighter.status != "airdodge") {
+				fighter.damage(angle, damage, knockback, hurtFrames, hitstun);
+				
+				if (type != "multiDamage") {
+					destroy();
+				}
+			}
 		}
 	}
 }
