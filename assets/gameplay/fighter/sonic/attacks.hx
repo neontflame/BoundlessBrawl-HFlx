@@ -1,5 +1,13 @@
 import objects.DamageBox;
 
+function createDmgbox(offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type) {
+	trace(offY + ', ' + size + ', ' + angle + ', ' + damage + ', ' + knockback + ', ' + _hurtFrames + ', ' + _hitstun + ', ' + type);
+	var dmgbox:DamageBox = new DamageBox(offX, offY, size);
+	dmgbox.changeInfo(angle, damage, knockback, _hurtFrames, _hitstun, type);
+	dmgbox.sprTracker = fit;
+	fit.dmgboxes.add(dmgbox);
+}
+
 function update() {
 	if (InputCoolio.key('special', 'press')) {
 		// angle, damage, knockback, _hurtFrames, _hitstun
@@ -23,12 +31,4 @@ function update() {
 		});
 	}
 	
-}
-
-function createDmgbox(offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type) {
-	trace(offY + ', ' + size + ', ' + angle + ', ' + damage + ', ' + knockback + ', ' + _hurtFrames + ', ' + _hitstun + ', ' + type);
-	var dmgbox:DamageBox = new DamageBox(offX, offY, size);
-	dmgbox.changeInfo(angle, damage, knockback, _hurtFrames, _hitstun, type);
-	dmgbox.sprTracker = fit;
-	fit.dmgboxes.add(dmgbox);
 }

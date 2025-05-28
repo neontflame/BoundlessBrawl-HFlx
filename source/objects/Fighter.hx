@@ -58,6 +58,10 @@ class Fighter extends FlxSpriteGroup
 		// SCRIPT
 		fitScript = new IrisHandler();
 		
+		fitScript.addByPath(Paths.script('global', 'gameplay/fighter'));
+		fitScript.setup();
+		fitScript.set('fit', this);
+				
 		var filenames:Array<String> = ['fighter', 'init', 'attacks', 'misc'];
 		
 		for (filery in filenames) { 

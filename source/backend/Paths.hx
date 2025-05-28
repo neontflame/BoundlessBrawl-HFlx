@@ -21,7 +21,7 @@ class Paths {
 		var existingType:String = 'hx';
 		
 		for (file in filetypes) {
-			if (CoolUtil.fileExists('assets/scripts/$key.$file')) {
+			if (CoolUtil.fileExists('assets/$rootDir/$key.$file')) {
 				existingType = file;
 			}
 		}
