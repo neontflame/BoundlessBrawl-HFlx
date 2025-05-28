@@ -438,7 +438,7 @@ class Fighter extends FlxSpriteGroup
 		fitScript.call('onDamage', [angle, damage, knockback, _hurtFrames, _hitstun]);
 	}
 	
-	public function createHitbox(offX:Float, offY:Float, size:Int, angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float, ?type:String = "default"){
+	function createHitbox(offX:Float, offY:Float, size:Int, angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float, type:String = "default"){
 		var dmgbox:DamageBox = new DamageBox(this, offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type);
 		dmgboxes.push(dmgbox);
 	}

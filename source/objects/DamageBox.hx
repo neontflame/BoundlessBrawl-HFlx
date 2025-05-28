@@ -7,7 +7,7 @@ import flixel.util.FlxColor;
 
 class DamageBox extends FlxSprite
 {
-	public var sprTracker:Dynamic;
+	public var sprTracker:FlxSprite;
 	
 	public var damage:Float = 0;
 	public var knockback:Float = 0;
@@ -17,7 +17,7 @@ class DamageBox extends FlxSprite
 	
 	public var type:String = "default"; // just here for posterity in case i wanna do cool shit with it later
 	
-	public function new(_sprTracker:Dynamic, x:Float, y:Float, size:Int, _angle:Float, _damage:Float, _knockback:Float, _hurtFrames:Int, _hitstun:Float, ?_type:String = "default") {
+	public function new(_sprTracker:FlxSprite, x:Float, y:Float, size:Int, _angle:Float, _damage:Float, _knockback:Float, _hurtFrames:Int, _hitstun:Float, ?_type:String = "default") {
 		super(x, y);
 		makeGraphic(size, size, 0x55FFFFFF);
 		
@@ -42,8 +42,10 @@ class DamageBox extends FlxSprite
 	{
 		if (sprTracker != null) {
 			if (Std.isOfType(sprTracker, Fighter)) {
-				var offsetX = (sprTracker.fitSprite.flipX ? -coolOffset[0] : coolOffset[0]);
-				setPosition(sprTracker.hitbox.x + offsetX, sprTracker.hitbox.y + coolOffset[1]);
+				var fit = cast(sprTracker, Fighter);
+				var offsetX = (fit.fitSprite.flipX ? -coolOffset[0] : coolOffset[0]);
+				
+				setPosition(fit.hitbox.x + offsetX, fit.hitbox.y + coolOffset[1]);
 			} else {
 				var offsetX = (sprTracker.flipX ? -coolOffset[0] : coolOffset[0]);
 				setPosition(sprTracker.x + coolOffset[0], sprTracker.y + coolOffset[1]);
