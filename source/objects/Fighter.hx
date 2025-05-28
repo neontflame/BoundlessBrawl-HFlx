@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxDirectionFlags;
 import flixel.util.FlxTimer;
+import flixel.util.FlxTimer.FlxTimerManager;
 import flixel.math.FlxMath;
 import flixel.math.FlxAngle;
 
@@ -20,6 +21,8 @@ class Fighter extends FlxSpriteGroup
 	public var fitSprite:FighterSprite;
 	public var hitbox:Hitbox;
 
+	public var TIMER_MANAGER:FlxTimerManager;
+	
 	// MAIN STATS
 	public var WALK_SPEED:Float = 500;
 	public var RUN_SPEED:Float = 700;
@@ -38,6 +41,7 @@ class Fighter extends FlxSpriteGroup
 		
 		// SETUP
 		trace('NEW FIGHTER: ' + fitName);
+		TIMER_MANAGER = new FlxTimerManager();
 		// SPRITE
 		fitSprite = new FighterSprite(x, y, fitName);
 		add(fitSprite);
@@ -109,6 +113,8 @@ class Fighter extends FlxSpriteGroup
 	{
 		fitScript.call('update', [elapsed]);
 		
+		TIMER_MANAGER.update(elapsed);
+		
 		hitStunner();
 		
 		if (hitstun <= 0)
@@ -150,8 +156,8 @@ class Fighter extends FlxSpriteGroup
 				// dmg/dmgcont
 				// they share much of the same code, it's just now we gotta figure out what DMG and DMGControllable do specifically
 				
-				var airvel = 0;
-				var horvel = 0;
+				var airvel:Float = 0;
+				var horvel:Float = 0;
 				
 				if (!hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					airvel = hitbox.velocity.y;
@@ -273,11 +279,13 @@ class Fighter extends FlxSpriteGroup
 					
 					// fall off platforms
 					if (InputCoolio.key('down', 'press')) {
+						fitScript.call('onFalloffPlat');
 						hitbox.jumpthruFalloffTimer = 15;
 					}
 					
 					// jump
 					if (InputCoolio.key('jump', 'press')) {
+						fitScript.call('onJump');
 						hitbox.velocity.y = -JUMP_STRENGTH;
 						jumped = true;
 					}
@@ -301,6 +309,8 @@ class Fighter extends FlxSpriteGroup
 				// AIRDODGE COOLIO
 				if (InputCoolio.key('dodge', 'press')) {
 					if (!airdodged) {
+						fitScript.call('onAirdodge', [horizontalDI, verticalDI]);
+						
 						status = "airdodge";
 						
 						hitbox.maxVelocity.x = WALK_SPEED * 1.5;
@@ -309,7 +319,7 @@ class Fighter extends FlxSpriteGroup
 						hitbox.velocity.y = WALK_SPEED * verticalDI * 1.5;
 						hitbox.jumpthruFalloffTimer = 5;
 						
-						airdodgeTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer) {
+						airdodgeTimer = new FlxTimer(TIMER_MANAGER).start(0.5, function(tmr:FlxTimer) {
 							status = "default";
 						});
 					}
@@ -378,6 +388,8 @@ class Fighter extends FlxSpriteGroup
 	}
 	
 	function damage(angle, damage, knockback, _hurtFrames, _hitstun){
+		TIMER_MANAGER.clear();
+		
 		var the_thing:Float = FlxMath.lerp(dmgPercent, 100, 0.3);
 
 		status = "dmg";
@@ -388,6 +400,8 @@ class Fighter extends FlxSpriteGroup
 		hitbox.velocity.y = (the_thing * knockback) * ((Math.cos(angle * FlxAngle.TO_RAD) + verticalDI) * -1);
 		
 		hurtTimer = _hurtFrames;
+		
+		fitScript.call('onDamage', [angle, damage, knockback, _hurtFrames, _hitstun]);
 	}
 	
 }
