@@ -24,6 +24,8 @@ class Fighter extends FlxSpriteGroup
 
 	public var TIMER_MANAGER:FlxTimerManager;
 	
+	public var dmgboxes:FlxTypedSpriteGroup<DamageBox>;
+	
 	// MAIN STATS
 	public var WALK_SPEED:Float = 500;
 	public var RUN_SPEED:Float = 700;
@@ -38,12 +40,17 @@ class Fighter extends FlxSpriteGroup
 	
 	public var RUNNING:Bool = false;
 	
+	public var ATTACK_PRIORITY:Int = -1;
+	
 	public function new(x:Float, y:Float, ?fitName:String = 'sonic') {
 		super(x, y);
 		
 		// SETUP
 		trace('NEW FIGHTER: ' + fitName);
 		TIMER_MANAGER = new FlxTimerManager();
+		dmgboxes = new FlxTypedSpriteGroup<DamageBox>();
+		add(dmgboxes);
+		
 		// SPRITE
 		fitSprite = new FighterSprite(x, y, fitName);
 		add(fitSprite);
@@ -68,6 +75,7 @@ class Fighter extends FlxSpriteGroup
 		// HITBOX
 		hitbox = new Hitbox(x, y, 32, 32);
 		add(hitbox);
+		
 		hitbox.gravValue = WEIGHT;
 		fitSprite.sprTracker = hitbox;
 
@@ -111,8 +119,6 @@ class Fighter extends FlxSpriteGroup
 	public var hurtTimer:Float = 0;
 	
 	var airdodgeTimer:FlxTimer;
-	
-	public var dmgboxes:Array<DamageBox> = [];
 	
 	override public function update(elapsed:Float)
 	{
@@ -416,9 +422,29 @@ class Fighter extends FlxSpriteGroup
 		}
 	}
 	
+	/*
+	for SOME godforsaken reason this needs to be on hscript. so it goes on hscript
+	oh my fjcuuuuckkikingngg god I'm gonna fucking pee man
+	
+	function createDmgbox(offX:Float, offY:Float, size:Int, angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float, type:String = "default"){
+		var dmgbox:DamageBox = new DamageBox(offX, offY, size);
+		dmgbox.changeInfo(angle, damage, knockback, _hurtFrames, _hitstun, type);
+		dmgbox.sprTracker = this;
+		dmgboxes.add(dmgbox);
+	}
+	*/
+	public function eraseDmgboxes() {
+		for (box in dmgboxes.members) {
+			if (box != null) {
+				box.destroy();
+			}
+		}
+		dmgboxes.clear();
+	}
+	
 	public function damage(angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float){
 		TIMER_MANAGER.clear();
-		
+		eraseDmgboxes();
 		var the_thing:Float = FlxMath.lerp(dmgPercent, 100, 0.3);
 
 		status = "dmg";
@@ -437,22 +463,5 @@ class Fighter extends FlxSpriteGroup
 		
 		fitScript.call('onDamage', [angle, damage, knockback, _hurtFrames, _hitstun]);
 	}
-	
-	function createHitbox(offX:Float, offY:Float, size:Int, angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float, type:String = "default"){
-		var dmgbox:DamageBox = new DamageBox(this, offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type);
-		dmgboxes.push(dmgbox);
-	}
-	
-	public function eraseHitbox(?hitIndex:Int = -1) {
-		if (hitIndex != null && hitIndex < dmgboxes.length) {
-			dmgboxes[hitIndex].destroy();
-			dmgboxes.remove(dmgboxes[hitIndex]);
-		} else {
-			for (dmgbox in dmgboxes) {
-				dmgbox.destroy();
-				dmgboxes.remove(dmgbox);
-			}
-			dmgboxes = [];
-		}
-	}
+
 }

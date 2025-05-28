@@ -4,6 +4,9 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
+import objects.Fighter;
+import objects.FighterSprite;
+import objects.Hitbox;
 
 class DamageBox extends FlxSprite
 {
@@ -17,25 +20,25 @@ class DamageBox extends FlxSprite
 	
 	public var type:String = "default"; // just here for posterity in case i wanna do cool shit with it later
 	
-	public function new(_sprTracker:FlxSprite, x:Float, y:Float, size:Int, _angle:Float, _damage:Float, _knockback:Float, _hurtFrames:Int, _hitstun:Float, ?_type:String = "default") {
+	public function new(x:Float, y:Float, size:Int) {
 		super(x, y);
 		makeGraphic(size, size, 0x55FFFFFF);
-		
-		angle = _angle;
-		damage = _damage;
-		knockback = _knockback;
-		hurtFrames = _hurtFrames;
-		hitstun = _hitstun; // in seconds!! remember always
-		
-		sprTracker = _sprTracker;
-		
-		if (sprTracker != null)
-			coolOffset = [x, y];
+	
+		coolOffset = [x, y];
 		
 		updateHitbox(); // i think?
 			
 		origin.set(size / 2, size / 2); // middle origin!
 
+	}
+	
+	public function changeInfo(_angle:Float, _damage:Float, _knockback:Float, _hurtFrames:Int, _hitstun:Float, ?_type:String = "default") {
+		angle = _angle;
+		damage = _damage;
+		knockback = _knockback;
+		hurtFrames = _hurtFrames;
+		hitstun = _hitstun; // in seconds!! remember always
+		type = _type;
 	}
 	
 	override public function update(elapsed:Float)

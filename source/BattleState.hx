@@ -40,6 +40,9 @@ class BattleState extends FlxState
 
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.R)
+			FlxG.resetState();
+			
 		player1.posUpdate();
 		player1.hitbox.physUpdate(floor, jumpthru);
 		
