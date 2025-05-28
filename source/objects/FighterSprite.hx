@@ -13,8 +13,11 @@ class FighterSprite extends FlxSprite
 	
 	public var animOffsets:Map<String, Array<Dynamic>>; // ANIMATION OFFSETS
 	
+	public var generalOffset:Array<Float> = [0,0]; // GENERAL OFFSETS
+	
 	public var hitboxOffset:Array<Int> = [0,0]; // HITBOX OFFSETS
 	public var hitboxAnimOffset:Array<Float> = [0,0]; // HITBOX OFFSETS
+	public var sprTracker:FlxSprite;
 	
 	public function new(x:Float, y:Float, ?fitName:String = 'sonic') {
 		super(x, y);
@@ -30,6 +33,12 @@ class FighterSprite extends FlxSprite
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		if (sprTracker != null) {
+			setPosition(
+			((sprTracker.x + sprTracker.origin.x) - width/2) + hitboxOffset[0] + hitboxAnimOffset[0] + generalOffset[0], 
+			((sprTracker.y + sprTracker.origin.y) - height) + hitboxOffset[1] + hitboxAnimOffset[1] + generalOffset[1]
+			);
+		}
 	}
 	
 	public function animAdd(name:String, internalName:String, offset:Array<Int>, framerate:Int = 24, loop:Bool = false) {

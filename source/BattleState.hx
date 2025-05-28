@@ -8,11 +8,13 @@ import objects.*;
 
 class BattleState extends FlxState
 {
-	var fighterlist:Array<Fighter> = [];
+	public var fighterlist:Array<Fighter> = [];
 	var player1:Fighter;
 	
-	var floor:FlxSprite;
-	var jumpthru:FlxSprite;
+	public var floor:FlxSprite;
+	public var jumpthru:FlxSprite;
+	
+	public static var instance:BattleState;
 	
 	override public function create()
 	{
@@ -32,6 +34,8 @@ class BattleState extends FlxState
 		add(player1);
 		
 		fighterlist.push(player1);
+		
+		instance = this;
 	}
 
 	override public function update(elapsed:Float)

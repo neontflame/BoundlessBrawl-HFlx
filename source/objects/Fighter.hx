@@ -13,6 +13,7 @@ import backend.IrisHandler;
 
 import objects.FighterSprite;
 import objects.Hitbox;
+import objects.DamageBox;
 
 class Fighter extends FlxSpriteGroup
 {
@@ -29,6 +30,7 @@ class Fighter extends FlxSpriteGroup
 	public var HORIZONTAL_ACCEL:Float = 500;
 	public var JUMP_STRENGTH:Float = 600;
 	public var WEIGHT:Float = 2000;
+	public var MIDAIR_JUMPS:Int = 2;
 	
 	public var FLOOR_FRICTION:Float = 6;
 	public var AIRDODGE_COEFFICIENT:Float = 4.5;
@@ -67,6 +69,7 @@ class Fighter extends FlxSpriteGroup
 		hitbox = new Hitbox(x, y, 32, 32);
 		add(hitbox);
 		hitbox.gravValue = WEIGHT;
+		fitSprite.sprTracker = hitbox;
 
 		loadAnims(fitName); // anims!
 		
@@ -80,9 +83,7 @@ class Fighter extends FlxSpriteGroup
 
 	public function posUpdate() {
 		// position shittery!
-		fitSprite.x = ((hitbox.x + hitbox.origin.x) - fitSprite.width/2) + fitSprite.hitboxOffset[0] + fitSprite.hitboxAnimOffset[0]
-		+ FlxG.random.float(-hitstun / 10, hitstun / 10);
-		fitSprite.y = ((hitbox.y + hitbox.origin.y) - fitSprite.height) + fitSprite.hitboxOffset[1] + fitSprite.hitboxAnimOffset[1];
+		fitSprite.generalOffset[0] = FlxG.random.float(-hitstun / 10, hitstun / 10);
 	}
 	
 	// CHAR CONTROLLER WHAAAAAAAAAAAATTTT
@@ -100,7 +101,8 @@ class Fighter extends FlxSpriteGroup
 	var runTimer:Float = 0;
 	
 	public var jumped:Bool = false;
-	public var airdodged:Bool = true;
+	public var midairJumpsDone:Int = 0;
+	public var airdodged:Bool = false;
 	
 	public var horizontalDI:Float = 0;
 	public var verticalDI:Float = 0;
@@ -109,6 +111,8 @@ class Fighter extends FlxSpriteGroup
 	public var hurtTimer:Float = 0;
 	
 	var airdodgeTimer:FlxTimer;
+	
+	public var dmgboxes:Array<DamageBox> = [];
 	
 	override public function update(elapsed:Float)
 	{
@@ -132,7 +136,6 @@ class Fighter extends FlxSpriteGroup
 			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
 			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
 		}
-		
 	}
 	
 	function hitStunner() {
@@ -207,7 +210,16 @@ class Fighter extends FlxSpriteGroup
 					// no bounce
 					if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 						status = 'default';
-					} 
+					} else {
+						// midair jump
+						if (InputCoolio.key('jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
+							fitScript.call('onJump', ['midair']);
+							status = 'default';
+							hitbox.velocity.y = -JUMP_STRENGTH;
+							jumped = true;
+							midairJumpsDone += 1;
+						}
+					}
 					
 					// can move !
 					if (InputCoolio.key('right')) {
@@ -275,6 +287,7 @@ class Fighter extends FlxSpriteGroup
 				}
 				
 				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
+					// if is on ground
 					airdodged = false;
 					if (InputCoolio.key('right')) {
 						fitSprite.flipX = false;
@@ -289,8 +302,9 @@ class Fighter extends FlxSpriteGroup
 					}
 					
 					// jump
+					midairJumpsDone = 0;
 					if (InputCoolio.key('jump', 'press')) {
-						fitScript.call('onJump');
+						fitScript.call('onJump', ['ground']);
 						hitbox.velocity.y = -JUMP_STRENGTH;
 						jumped = true;
 					}
@@ -309,6 +323,16 @@ class Fighter extends FlxSpriteGroup
 							runTimer = 15;
 						}
 					}
+				} else {
+					// if is on air
+					// midair jump
+					if (InputCoolio.key('jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
+						fitScript.call('onJump', ['midair']);
+						hitbox.velocity.y = -JUMP_STRENGTH;
+						jumped = true;
+						midairJumpsDone += 1;
+					}
+					
 				}
 				
 				// AIRDODGE COOLIO
@@ -392,7 +416,7 @@ class Fighter extends FlxSpriteGroup
 		}
 	}
 	
-	function damage(angle, damage, knockback, _hurtFrames, _hitstun){
+	public function damage(angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float){
 		TIMER_MANAGER.clear();
 		
 		var the_thing:Float = FlxMath.lerp(dmgPercent, 100, 0.3);
@@ -414,4 +438,19 @@ class Fighter extends FlxSpriteGroup
 		fitScript.call('onDamage', [angle, damage, knockback, _hurtFrames, _hitstun]);
 	}
 	
+	public function createHitbox(offX:Float, offY:Float, size:Int, angle:Float, damage:Float, knockback:Float, _hurtFrames:Int, _hitstun:Float, ?type:String = "default"){
+		var dmgbox:DamageBox = new DamageBox(this, offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type);
+		dmgboxes.push(dmgbox);
+	}
+	
+	public function eraseHitbox(?hitIndex:Int = -1) {
+		if (hitIndex != null && hitIndex < dmgboxes.length) {
+			dmgboxes[hitIndex].destroy();
+			dmgboxes.remove(dmgboxes[hitIndex]);
+		} else {
+			for (dmgbox in dmgboxes) { 
+				dmgboxes.remove(dmgbox);
+			}
+		}
+	}
 }
