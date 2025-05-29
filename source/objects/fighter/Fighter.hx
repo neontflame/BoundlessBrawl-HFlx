@@ -1,4 +1,4 @@
-package objects;
+package objects.fighter;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -11,12 +11,13 @@ import flixel.math.FlxAngle;
 
 import backend.IrisHandler;
 
-import objects.FighterSprite;
+import objects.fighter.FighterSprite;
 import objects.Hitbox;
 import objects.DamageBox;
 
 class Fighter extends FlxSpriteGroup
 {
+	public var FIT_NAME:String = "";
 	public var fitScript:IrisHandler;
 	
 	public var fitSprite:FighterSprite;
@@ -48,7 +49,7 @@ class Fighter extends FlxSpriteGroup
 		super(x, y);
 		
 		FIT_ID = fitId;
-		
+		FIT_NAME = fitName;
 		// SETUP
 		trace('NEW FIGHTER: ' + fitName);
 		TIMER_MANAGER = new FlxTimerManager();

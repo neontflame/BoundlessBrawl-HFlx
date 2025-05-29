@@ -4,8 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
-import objects.Fighter;
-import objects.FighterSprite;
+import objects.fighter.*;
 import objects.Hitbox;
 
 class DamageBox extends FlxSprite

@@ -18,39 +18,40 @@ class InputCoolio
 		"dodge" => "A"
 	],
 	[
-		"left" => "NINE",
-		"down" => "NINE",
-		"up" => "NINE",
-		"right" => "NINE",
-		"jump" => "NINE",
-		"basic" => "NINE",
-		"special" => "NINE",
-		"dodge" => "NINE"
+		"left" => "NONE",
+		"down" => "NONE",
+		"up" => "NONE",
+		"right" => "NONE",
+		"jump" => "NONE",
+		"basic" => "NONE",
+		"special" => "NONE",
+		"dodge" => "NONE"
 	],
 	[
-		"left" => "NINE",
-		"down" => "NINE",
-		"up" => "NINE",
-		"right" => "NINE",
-		"jump" => "NINE",
-		"basic" => "NINE",
-		"special" => "NINE",
-		"dodge" => "NINE"
+		"left" => "NONE",
+		"down" => "NONE",
+		"up" => "NONE",
+		"right" => "NONE",
+		"jump" => "NONE",
+		"basic" => "NONE",
+		"special" => "NONE",
+		"dodge" => "NONE"
 	],
 	[
-		"left" => "NINE",
-		"down" => "NINE",
-		"up" => "NINE",
-		"right" => "NINE",
-		"jump" => "NINE",
-		"basic" => "NINE",
-		"special" => "NINE",
-		"dodge" => "NINE"
+		"left" => "NONE",
+		"down" => "NONE",
+		"up" => "NONE",
+		"right" => "NONE",
+		"jump" => "NONE",
+		"basic" => "NONE",
+		"special" => "NONE",
+		"dodge" => "NONE"
 	]
 	];
 
 	public static function key(binds:Int, key:String, ?mode:String = 'normal'):Bool
 	{
+		if (keybinds[binds][key] == "NONE" || keybinds[binds][key] == "") return false;
 		switch (mode) {
 			case 'press':
 				return FlxG.keys.checkStatus(FlxKey.fromString(keybinds[binds][key]), FlxInputState.JUST_PRESSED);
@@ -64,6 +65,7 @@ class InputCoolio
 	
 	public static function keyBinary(binds:Int, key:String, ?mode:String = 'normal'):Int
 	{
+		if (keybinds[binds][key] == "NONE" || keybinds[binds][key] == "") return 0;
 		switch (mode) {
 			case 'press':
 				return (FlxG.keys.checkStatus(FlxKey.fromString(keybinds[binds][key]), FlxInputState.JUST_PRESSED) ? 1 : 0);

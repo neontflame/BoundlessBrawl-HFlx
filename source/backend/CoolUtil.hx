@@ -6,6 +6,8 @@ import openfl.system.System;
 import flixel.sound.FlxSound;
 import flixel.system.FlxAssets.FlxSoundAsset;
 
+import flixel.util.FlxColor;
+
 using StringTools;
 
 #if sys
@@ -13,6 +15,35 @@ import sys.FileSystem;
 #end
 
 class CoolUtil {
+
+	public static function fitColorById(id:Int):FlxColor {
+		switch (id) {
+			case 0:
+				return FlxColor.RED;
+			case 1:
+				return FlxColor.LIME;
+			case 2:
+				return FlxColor.BLUE;
+			case 3:
+				return FlxColor.YELLOW;
+			default:
+				return FlxColor.GRAY;
+		}
+		return FlxColor.WHITE;
+	}
+	
+	public static function fitNameById(name:String):String {
+		switch (name) {
+			case 'sonic':
+				return "SONIC";
+			case 'neon':
+				return "NEON T. FLAME";
+			case 'coio':
+				return "COIO";
+			default:
+				return "PLACEHOLDER";
+		}
+	}
 	public static function coolTextFile(path:String):Array<String> {
 		var daList:Array<String> = Assets.getText(path).trim().split('\n');
 

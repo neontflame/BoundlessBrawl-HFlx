@@ -3,14 +3,25 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.FlxCamera;
+
 import flixel.util.FlxDirectionFlags;
+import flixel.util.FlxColor;
+
 import objects.*;
+import objects.fighter.*;
+import hud.*;
 
 class BattleState extends FlxState
 {
+	public var camHUD:FlxCamera;
+	public var camGame:FlxCamera;
+	
 	public var fighterlist:Array<Fighter> = [];
 	var player0:Fighter;
 	var player1:Fighter;
+	
+	public var hudlist:Array<FighterPortrait> = [];
 	
 	public var floor:FlxSprite;
 	public var jumpthru:FlxSprite;
@@ -19,7 +30,14 @@ class BattleState extends FlxState
 	
 	override public function create()
 	{
+		camGame = new FlxCamera();
+		camHUD = new FlxCamera();
+		camHUD.bgColor = FlxColor.TRANSPARENT;
+		
 		super.create();
+		
+		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camHUD, false);
 		
 		floor = new FlxSprite(0, 400).makeGraphic(500, 25, 0xFFFFFFFF);
 		floor.immovable = true;
@@ -31,16 +49,22 @@ class BattleState extends FlxState
 		add(floor);
 		add(jumpthru);
 		
+		// players
 		player0 = new Fighter(100, 100, 'sonic', 0);
 		add(player0);
-		
-		fighterlist.push(player0);
-		
-		
 		player1 = new Fighter(200, 100, 'sonic', 1);
 		add(player1);
 		
+		fighterlist.push(player0);
 		fighterlist.push(player1);
+		
+		// player huds
+		for (fit in fighterlist) {
+			var pHUD:FighterPortrait = new FighterPortrait(fit.FIT_ID * 210, 375, fit);
+			pHUD.cameras = [camHUD];
+			add(pHUD);
+			hudlist.push(pHUD);
+		}
 		
 		instance = this;
 	}
