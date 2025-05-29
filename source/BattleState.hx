@@ -10,7 +10,7 @@ import flixel.util.FlxColor;
 
 import objects.*;
 import objects.fighter.*;
-import hud.*;
+import ui.*;
 
 class BattleState extends FlxState
 {
@@ -21,7 +21,7 @@ class BattleState extends FlxState
 	var player0:Fighter;
 	var player1:Fighter;
 	
-	public var hudlist:Array<FighterPortrait> = [];
+	public var hudlist:Array<BattleHUDPortrait> = [];
 	
 	public var floor:FlxSprite;
 	public var jumpthru:FlxSprite;
@@ -60,10 +60,12 @@ class BattleState extends FlxState
 		
 		// player huds
 		for (fit in fighterlist) {
-			var pHUD:FighterPortrait = new FighterPortrait(fit.FIT_ID * 210, 375, fit);
+			var pHUD:BattleHUDPortrait = new BattleHUDPortrait(fit.FIT_ID * 210, 375, fit);
 			pHUD.cameras = [camHUD];
 			add(pHUD);
 			hudlist.push(pHUD);
+			
+			fit.fitScript.set('hud', pHUD);
 		}
 		
 		instance = this;

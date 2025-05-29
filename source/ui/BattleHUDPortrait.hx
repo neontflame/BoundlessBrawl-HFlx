@@ -1,19 +1,17 @@
-package hud;
+package ui;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
-import flixel.util.FlxDirectionFlags;
-import flixel.util.FlxTimer;
-import flixel.util.FlxTimer.FlxTimerManager;
-import flixel.math.FlxMath;
-import flixel.math.FlxAngle;
+
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 import backend.IrisHandler;
 
 import objects.fighter.Fighter;
 
-class FighterPortrait extends FlxSpriteGroup
+class BattleHUDPortrait extends FlxSpriteGroup
 {
 	public var hudScript:IrisHandler;
 	
@@ -25,7 +23,12 @@ class FighterPortrait extends FlxSpriteGroup
 		var portraitBack:FlxSprite = new FlxSprite(16, 16).loadGraphic(Paths.asset('portraitHolder.png', 'gameplay/hud'));
 		var portrait:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.asset('icon.png', fighter.fitSprite.fitFolder));
 		
+		var name:FlxText = new FlxText(nameBack.x + 4, nameBack.y + 2, nameBack.width, CoolUtil.fitNameById(fighter.FIT_NAME), 18, false);
+		name.setFormat(Paths.asset('5by7.ttf', 'fonts'), 18, FlxColor.WHITE, LEFT, OUTLINE, 0x50FFFFFF, false);
+		name.borderSize = 1;
+		
 		add(nameBack);
+		add(name);
 		add(portraitBack);
 		add(portrait);
 	
