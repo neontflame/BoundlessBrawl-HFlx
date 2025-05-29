@@ -9,6 +9,7 @@ import objects.*;
 class BattleState extends FlxState
 {
 	public var fighterlist:Array<Fighter> = [];
+	var player0:Fighter;
 	var player1:Fighter;
 	
 	public var floor:FlxSprite;
@@ -30,7 +31,13 @@ class BattleState extends FlxState
 		add(floor);
 		add(jumpthru);
 		
-		player1 = new Fighter(100, 100, 'sonic');
+		player0 = new Fighter(100, 100, 'sonic', 0);
+		add(player0);
+		
+		fighterlist.push(player0);
+		
+		
+		player1 = new Fighter(200, 100, 'sonic', 1);
 		add(player1);
 		
 		fighterlist.push(player1);
@@ -43,8 +50,10 @@ class BattleState extends FlxState
 		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
 			
-		player1.posUpdate();
-		player1.hitbox.physUpdate(floor, jumpthru);
+		for (fit in fighterlist) {
+			fit.posUpdate();
+			fit.hitbox.physUpdate(floor, jumpthru);
+		}
 		
 		super.update(elapsed);
 	}

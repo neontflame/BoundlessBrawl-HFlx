@@ -1,7 +1,7 @@
 import objects.DamageBox;
 
 function createDmgbox(offX, offY, size, angle, damage, knockback, _hurtFrames, _hitstun, type) {
-	trace(offY + ', ' + size + ', ' + angle + ', ' + damage + ', ' + knockback + ', ' + _hurtFrames + ', ' + _hitstun + ', ' + type);
+	// trace(offY + ', ' + size + ', ' + angle + ', ' + damage + ', ' + knockback + ', ' + _hurtFrames + ', ' + _hitstun + ', ' + type);
 	var dmgbox:DamageBox = new DamageBox(offX, offY, size);
 	dmgbox.changeInfo(angle, damage, knockback, _hurtFrames, _hitstun, type);
 	dmgbox.sprTracker = fit;
@@ -9,12 +9,12 @@ function createDmgbox(offX, offY, size, angle, damage, knockback, _hurtFrames, _
 }
 
 function update() {
-	if (InputCoolio.key('special', 'press')) {
+	if (InputCoolio.key(fit.FIT_ID, 'special', 'press')) {
 		// angle, damage, knockback, _hurtFrames, _hitstun
 		fit.damage(45, 12, 10, 100, 1);
-		trace(fit.hitbox.velocity);
+		// trace(fit.hitbox.velocity);
 	}
-	if (InputCoolio.key('right') && InputCoolio.key('basic', 'press')) {
+	if (InputCoolio.key(fit.FIT_ID, 'right') && InputCoolio.key(fit.FIT_ID, 'basic', 'press')) {
 	
 		createDmgbox(30, -20, 32, 25, 15, 10, 20, 0.05, 'multiDamage');
 		// SAMPLE RIGHT ATTACK

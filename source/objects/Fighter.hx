@@ -26,6 +26,8 @@ class Fighter extends FlxSpriteGroup
 	
 	public var dmgboxes:FlxTypedSpriteGroup<DamageBox>;
 	
+	public var FIT_ID:Int = 1;
+	
 	// MAIN STATS
 	public var WALK_SPEED:Float = 500;
 	public var RUN_SPEED:Float = 700;
@@ -42,8 +44,10 @@ class Fighter extends FlxSpriteGroup
 	
 	public var ATTACK_PRIORITY:Int = -1;
 	
-	public function new(x:Float, y:Float, ?fitName:String = 'sonic') {
+	public function new(x:Float, y:Float, ?fitName:String = 'sonic', fitId:Int = 1) {
 		super(x, y);
+		
+		FIT_ID = fitId;
 		
 		// SETUP
 		trace('NEW FIGHTER: ' + fitName);
@@ -143,8 +147,8 @@ class Fighter extends FlxSpriteGroup
 	
 	function DImanager() {
 		if (status != "airdodge") {
-			horizontalDI = InputCoolio.keyBinary('right') - InputCoolio.keyBinary('left');
-			verticalDI = InputCoolio.keyBinary('down') - InputCoolio.keyBinary('up');
+			horizontalDI = InputCoolio.keyBinary(FIT_ID, 'right') - InputCoolio.keyBinary(FIT_ID, 'left');
+			verticalDI = InputCoolio.keyBinary(FIT_ID, 'down') - InputCoolio.keyBinary(FIT_ID, 'up');
 		}
 	}
 	
@@ -222,7 +226,7 @@ class Fighter extends FlxSpriteGroup
 						status = 'default';
 					} else {
 						// midair jump
-						if (InputCoolio.key('jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
+						if (InputCoolio.key(FIT_ID, 'jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
 							fitScript.call('onJump', ['midair']);
 							status = 'default';
 							hitbox.velocity.y = -JUMP_STRENGTH;
@@ -232,9 +236,9 @@ class Fighter extends FlxSpriteGroup
 					}
 					
 					// can move !
-					if (InputCoolio.key('right')) {
+					if (InputCoolio.key(FIT_ID, 'right')) {
 						hitbox.acceleration.x = HORIZONTAL_ACCEL;
-					} else if (InputCoolio.key('left')) {
+					} else if (InputCoolio.key(FIT_ID, 'left')) {
 						hitbox.acceleration.x = -HORIZONTAL_ACCEL;
 					} else {
 						hitbox.acceleration.x = 0;
@@ -264,9 +268,9 @@ class Fighter extends FlxSpriteGroup
 					// hitbox.drag.x = WALK_SPEED * FLOOR_FRICTION;
 					hitbox.drag.y = 0;
 					
-					if (InputCoolio.key('right')) {
+					if (InputCoolio.key(FIT_ID, 'right')) {
 						hitbox.acceleration.x = HORIZONTAL_ACCEL;
-					} else if (InputCoolio.key('left')) {
+					} else if (InputCoolio.key(FIT_ID, 'left')) {
 						hitbox.acceleration.x = -HORIZONTAL_ACCEL;
 					} else {
 						hitbox.acceleration.x = 0;
@@ -284,11 +288,11 @@ class Fighter extends FlxSpriteGroup
 				hitbox.drag.x = WALK_SPEED * FLOOR_FRICTION;
 				hitbox.drag.y = 0;
 				
-				if (InputCoolio.key('right')) {
+				if (InputCoolio.key(FIT_ID, 'right')) {
 					if (RUNNING) 
 						runTimer = 7;
 					hitbox.acceleration.x = HORIZONTAL_ACCEL;
-				} else if (InputCoolio.key('left')) {
+				} else if (InputCoolio.key(FIT_ID, 'left')) {
 					if (RUNNING) 
 						runTimer = 7;
 					hitbox.acceleration.x = -HORIZONTAL_ACCEL;
@@ -299,34 +303,34 @@ class Fighter extends FlxSpriteGroup
 				if (hitbox.isTouching(FlxDirectionFlags.FLOOR)) {
 					// if is on ground
 					airdodged = false;
-					if (InputCoolio.key('right')) {
+					if (InputCoolio.key(FIT_ID, 'right')) {
 						fitSprite.flipX = false;
-					} else if (InputCoolio.key('left')) {
+					} else if (InputCoolio.key(FIT_ID, 'left')) {
 						fitSprite.flipX = true;
 					}
 					
 					// fall off platforms
-					if (InputCoolio.key('down', 'press')) {
+					if (InputCoolio.key(FIT_ID, 'down', 'press')) {
 						fitScript.call('onFalloffPlat');
 						hitbox.jumpthruFalloffTimer = 15;
 					}
 					
 					// jump
 					midairJumpsDone = 0;
-					if (InputCoolio.key('jump', 'press')) {
+					if (InputCoolio.key(FIT_ID, 'jump', 'press')) {
 						fitScript.call('onJump', ['ground']);
 						hitbox.velocity.y = -JUMP_STRENGTH;
 						jumped = true;
 					}
 					
 					// run
-					if (InputCoolio.key('right', 'press') || InputCoolio.key('left', 'press')) {
+					if (InputCoolio.key(FIT_ID, 'right', 'press') || InputCoolio.key(FIT_ID, 'left', 'press')) {
 						if (runTimer > 0) {
 							if (!RUNNING) {
 								RUNNING = true;
-								if (InputCoolio.key('right'))
+								if (InputCoolio.key(FIT_ID, 'right'))
 									hitbox.velocity.x = RUN_SPEED;
-								if (InputCoolio.key('left'))
+								if (InputCoolio.key(FIT_ID, 'left'))
 									hitbox.velocity.x = -RUN_SPEED;
 							}
 						} else {
@@ -336,7 +340,7 @@ class Fighter extends FlxSpriteGroup
 				} else {
 					// if is on air
 					// midair jump
-					if (InputCoolio.key('jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
+					if (InputCoolio.key(FIT_ID, 'jump', 'press') && midairJumpsDone < MIDAIR_JUMPS) {
 						fitScript.call('onJump', ['midair']);
 						hitbox.velocity.y = -JUMP_STRENGTH;
 						jumped = true;
@@ -346,7 +350,7 @@ class Fighter extends FlxSpriteGroup
 				}
 				
 				// AIRDODGE COOLIO
-				if (InputCoolio.key('dodge', 'press')) {
+				if (InputCoolio.key(FIT_ID, 'dodge', 'press')) {
 					if (!airdodged) {
 						fitScript.call('onAirdodge', [horizontalDI, verticalDI]);
 						
