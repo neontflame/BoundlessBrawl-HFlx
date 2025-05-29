@@ -4,8 +4,12 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 
-import flixel.text.FlxText;
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+
+import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
+import flixel.graphics.frames.FlxBitmapFont;
 
 import backend.IrisHandler;
 
@@ -14,10 +18,14 @@ import objects.fighter.Fighter;
 class BattleHUDPortrait extends FlxSpriteGroup
 {
 	public var hudScript:IrisHandler;
+	var fit:Fighter;
+	
+	var dmgFont:FlxBitmapFont;
+	var dmgText:FlxBitmapText;
 	
 	public function new(x:Float, y:Float, fighter:Fighter) {
 		super(x, y);
-
+		
 		var nameBack:FlxSprite = new FlxSprite(86, 63).loadGraphic(Paths.asset('nameHolder.png', 'gameplay/hud'));
 		nameBack.color = CoolUtil.fitColorById(fighter.FIT_ID);
 		var portraitBack:FlxSprite = new FlxSprite(16, 16).loadGraphic(Paths.asset('portraitHolder.png', 'gameplay/hud'));
@@ -32,6 +40,16 @@ class BattleHUDPortrait extends FlxSpriteGroup
 		add(portraitBack);
 		add(portrait);
 	
+		dmgFont = FlxBitmapFont.fromMonospace(Paths.asset('dmgFont.png', 'gameplay/hud'), "0123456789%'" + '"' + ":;,", FlxPoint.get(48, 64));
+
+		dmgText = new FlxBitmapText(dmgFont);
+		dmgText.x = 83;
+		dmgText.y = 20;
+		dmgText.letterSpacing = -20;
+		dmgText.text = '0';
+		dmgText.autoSize = true;
+		add(dmgText);
+			
 		hudScript = new IrisHandler();
 		
 		var file:String = Paths.script('hud', fighter.fitSprite.fitFolder);
@@ -45,6 +63,8 @@ class BattleHUDPortrait extends FlxSpriteGroup
 			hudScript.set('fit', fighter);
 		}
 		
+		fit = fighter;
+		
 		hudScript.call('createPost');
 	}
 	
@@ -53,6 +73,8 @@ class BattleHUDPortrait extends FlxSpriteGroup
 		hudScript.call('update', [elapsed]);
 			
 		super.update(elapsed);
+		
+		dmgText.text = fit.dmgPercent + '%';
 		
 		hudScript.call('updatePost', [elapsed]);
 		
